@@ -1,0 +1,69 @@
+{% extends "base.html" %} {% load static %}
+<title>{% block title %}Profile{% endblock title %}</title>
+
+{% block content %}
+<style>
+    .custom-thumbnail {
+         /* Set the border color */
+        background-color: #247158;
+    }
+</style>
+<section class="min-vh-100" style="background-color: #f4f5f7;">
+    <div class="container mt-5 py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-6 mb-4 mb-lg-0">
+          <div class="card mb-3" style="border-radius: .5rem;">
+            <div class="row g-0">
+              <h2 class = "text-center mt-3" style="color: #247158">PROFILE</h2>
+              <div class="col-md-4 gradient-custom text-center"
+                style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                
+                {% if user.profile_image %}
+                <img src="{{user.profile_image.url}}"
+                    alt="Avatar" class="img-fluid img-thumbnail custom-thumbnail rounded-circle my-5" style="width: 120px; height:120px;" />
+                
+                    {% else %}
+                    <img src="{% static "images/default profile.png" %}"
+                    alt="Avatar" class="img-fluid my-5" style="width: 80px; height:80px;" />
+                {% endif %}
+               
+                <h5>{{user.first_name}} {{user.last_name}}</h5>
+                <a href="{% url "update_user_profile" %}" class = "text-primary"><i class="far fa-edit mb-5"></i></a>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body p-4">
+                  <h6 style="color: #247158">PERSONAL INFORMATION</h6>
+                  <hr class="mt-0 mb-4">
+                  <div class="row pt-1">
+                    <div class="col-12 mb-3">
+                      <h6>EMAIL</h6>
+                      <p class="text-muted">{{user.email}}</p>
+                    </div>
+                    <!--<div class="col-6 mb-3">
+                      <h6>Phone</h6>
+                      <p class="text-muted">123 456 789</p>
+                    </div>-->
+                  </div>
+                  <h6 style="color: #247158">ACTIONS</h6>
+                  <hr class="mt-0 mb-4">
+                  <div class="row pt-1">
+                    <div class="col-6 mb-3">
+                      <h6>DATE JOINED</h6>
+                      <p class="text-muted">{{user.date_joined}}</p>
+                    </div>
+                    <div class="col-6 mb-3">
+                      <h6>LAST LOGIN</h6>
+                      <p class="text-muted">{{user.last_login}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    
+{% endblock content %}

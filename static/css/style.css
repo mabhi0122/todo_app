@@ -1,0 +1,79 @@
+*{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+html{
+    height: 100%;
+}
+body{
+    background-color:#f8f8f8f8;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+.navbar-toggler,
+.btn-close
+{
+    outline: none !important;
+    box-shadow: none !important;
+    border: 0px !important;
+}
+
+.navbar-toggler:hover{
+    color: red !important;
+}
+.offcanvas-start{
+    width: 223px !important;
+  }
+
+  .nav {
+    text-align: center;
+    background: rgba(0,0,0,0.1);
+  }
+
+  .nav a {
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 3px;
+    display: inline-block;
+    color: #000;
+    font-family: sans-serif;
+    font-weight: 600;
+    transition: all .3s ease;
+
+    position: relative;
+    z-index: 1;
+  }
+
+nav, .offcanvas, .dropdown-menu{
+    background-color: #247158 !important;
+   
+  }
+
+.nav-link, .navbar-brand, .dropdown-item{
+    color: #d5deef !important;
+}
+.navbar-brand:hover{
+    color: ghostwhite !important;
+}
+.nav-link:hover{
+    color: ghostwhite !important;
+}
+.fa-bars:hover{
+    color: ghostwhite !important;
+}
+.dropdown-toggle::after { 
+    content: none !important; 
+} 
+.dropdown-menu .dropdown-item:hover { 
+    background-color:rgb(50, 126, 101) !important; 
+} 
+
+

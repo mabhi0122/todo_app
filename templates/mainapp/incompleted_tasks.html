@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+
+<title>{% block title %}Incomplete tasks{% endblock title %}</title>
+{% block content %}
+
+<section class= "min-vh-100 mb-3">
+    <div class="container d-flex justify-content-center align-items-center" style="margin-top: 150px">
+        <div class="col-sm-10 col-md-8 col-lg-5 col-11  h-100">
+
+            
+            <div class="card p-2" style="background-color: #247158; color: ghostwhite;">
+                {% for message in messages %}
+                        <div class="message text-center">
+                            <small class= "alert alert-warning">{{ message }}</small>
+                            <a href="#" class="del-msg"></a>
+                        </div>
+                        {% endfor %}                       
+                <div class="card-body">                    
+                
+                    <div>                   
+                        {% if count %}
+                        <small>You have {{ count }} incomplete task{{ count|pluralize:"s" }}</small>
+                        {% else %}
+                        <small>you have {{ count }} incomplete task{{ count|pluralize:"s" }}</small>
+                        {% endif %}
+                    </div>
+
+                    <form action="{% url "todo_list" %}" method="post" class="d-flex mt-2">
+                        {% csrf_token %}
+                        {{ form.title }}
+                        <button class="btn ms-2" style="border: none">
+                            <i class="fa-solid fa-plus" style="font-size: 30px; color: ghostwhite;"></i>
+                        </button>
+                    </form>
+
+                    {% if form.errors %}
+                    <ul>
+                        {% for error in form.title.errors %}
+                            <li class= "list-group-item text-danger">{{ error }}</li>
+                        {% endfor %}
+                    </ul> 
+                    {% endif %}
+
+                    <div class="text-center d-flex justify-content-between container text-white mt-3 border border-white p-2 rounded-3">
+                        <a href="{% url "todo_list" %}" id="show-all" class="mx-2 text-decoration-none text-white">all</a>|
+                        <a href="{% url "completed-tasks" %}" id="show-complete" class="mx-2 text-decoration-none text-white">completed</a>|
+                        <a href="{% url "incompleted-tasks" %}" id="show-incomplete" class="mx-2 text-decoration-none text-white">incomplete</a>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            {% if request.user.is_authenticated %}
+                <div class="card mt-1">
+                    <div class="card-body">                
+                        
+                        {% if completed %}
+                            <ul class="list-group">
+                                {% for completed in completed %}
+                                    <li id="task-{{ completed.id }}" class="list-group-item {% if completed.is_completed %}completed{% endif %} mb-2 border-2 rounded-1">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <div class="container">
+                                                    <small class="text-sm" style="color:#247158;"> {{ completed.created_at }}</small> <br>
+                                                </div>
+
+                                                <input type="checkbox" class="mycheckbox me-1" value="{{ completed.id }}" {% if completed.is_completed %} checked {% endif %} />
+                                                <span><a href="{% url "detail-view" completed.pk %}" class = 'text-dark' style = "text-decoration:none">{{ completed.title }}</a></span>
+                                            </div>
+                                            <div class="d-flex">
+                                                <a href="{% url "update-task" completed.id %}" class="text-primary me-2"><i class="fa-regular fa-pen-to-square"></i></a>
+                                                <a href="" data-bs-toggle="modal" data-bs-target="#deleteModal_{{completed.id}}" class="text-danger"><i class="fa-solid fa-trash-can"></i> </a>
+                                            
+                                            </div>
+                                        </div>
+                                    </li>                             
+        
+                                    <!-- Delete task Modal-->
+                                    <div class="modal fade " id="deleteModal_{{completed.id}}"  tabindex="-1" aria-labelledby="deleteModal_{{completed.id}}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <form action="{% url "delete-task" completed.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="id" value="{{completed.id}}">
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <p>Are you sure? you want to delete</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-danger" name="delete">Delete</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>  
+                                    <!--End Delete task Modal--> 
+        
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <span style="color:#247158">Add your tasks to do</span>
+                        {% endif %}
+            {% endif %}
+                    </div>
+                </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // Triggered when the checkbox is clicked
+        $('.mycheckbox').on('change', function() {
+    
+          // Get the value (task ID) from the checkbox
+          var taskId = $(this).val();
+          
+          // Check if the checkbox is checked
+          var completed = this.checked;
+      
+          // Make an AJAX request to update the backend
+          $.ajax({
+            type: 'POST',
+            url: '/update-task/',  
+            data: {
+              'task_id': taskId,
+              'completed': completed,
+              csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(), 
+            },
+            success: function(data) {
+              // Update the class of the corresponding list item based on the task status
+              $('#task-' + taskId).toggleClass('completed', completed);
+              location.reload();
+            },
+            error: function(error) {
+              console.log('Error updating task:', error);
+            }
+          });
+        });
+      });  
+</script>
+<style>
+  .completed {
+    text-decoration: line-through;
+  }
+
+</style>
+
+{% endblock content %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% load static %}
+<title>{% block title %}Register{% endblock title %}</title>
+
+{% block content %}
+
+<div class="container mt-5 py-5 h-100">
+    		<div class="row h-100">
+				<div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+					<div class="d-table-cell align-middle">					
+
+						<div class="card">
+							<div class="card-body">
+									<h5 class="text-center" style="color: #247158" >Register</h5>
+								{% for message in messages %}
+								<div class="message">
+									<small class= "alert alert-warning">{{ message }}</small>
+									<a href="#" class="del-msg"></a>
+								</div>
+								{% endfor %} 
+								
+								<div class="m-sm-4">
+									<form method = "post">				
+									
+										{% csrf_token %}
+                                        {{form.as_p}}
+										<button type="submit" class="btn btn-primary rounded-pill text-decoration-none" style="width:100px">Register</button>
+										
+									</form>
+									<span class="text-muted ">Already have an account? <a href="{% url "login" %}" class= "me-3 text-decoration-none"> Login</a></span>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+{% endblock content %}

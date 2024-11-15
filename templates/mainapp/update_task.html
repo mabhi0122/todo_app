@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+<title>{% block title %}Update Task{% endblock title %}</title>
+
+{% block content %}
+
+<div class="container justify-content-center align-items-center" style="margin-top: 100px">
+    <div class="col-md-5 mx-auto">
+        <div class="card p-2" style="background-color: #247158; color: ghostwhite;">
+            <div class="card-body">                
+                <form action="" method="post" class="mt-2">
+                    {% csrf_token %}
+                    {{ updateform.as_p }}
+                    <div class="d-flex mt-3">
+                        <button class="btn btn-warning me-3">Update</button>
+                        <a href="{% url "todo_list" %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
